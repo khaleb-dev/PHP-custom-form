@@ -35,9 +35,7 @@ class Manager
 		return substr(str_shuffle($str_result), 0, $length_of_string); 
 	}
 
-
-	// $form->setSholder(isset($setup['sholder']) ? $setup['sholder'] : false);
-
+	// This method will create a new record in the form table
 	public function createForm(array $formDetails)
 	{
         try {
@@ -86,6 +84,26 @@ class Manager
         return $this->response;
     }
 
+    // This method will fetch all forms created by a particular user.
+    public function fetchFormsByUserId(int $userId)
+	{
+        try {  
+            $sql = "SELECT id, created_by, slug, form_title, last_name, first_name, middle_name, gender, dob, address, likes_dislikes, created_at, updated_at FROM form where created_by = $userId";
+            $smt = $this->connect->query($sql);
+            $allusers = $smt->fetchAll(PDO::FETCH_ASSOC);
+            return $allusers;
+        }
+        catch(PDOException $e) {
+                 echo ($e->getMessage() . ' ' . $e->getCode() . ' ' . $e->getFile() . ' ' . $e->getLine());
+                exit();
+                Log_Errors::Log_DBerror_msg($e->getMessage() . ' --------- A Problem was encountered while saving departmental clearance details for : ' . $name, $e->getCode(), $e->getFile(), $e->getLine());
+                $errorno = 'An error might have occurred in the System';
+                header("location: ../index.php?notice=$errorno");
+                exit;
+         }
+    }
+
+    // This method will create a new record in the participant table
     public function createParticipant(array $participantDetails, int $formId)
 	{
         try {

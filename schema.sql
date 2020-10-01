@@ -52,6 +52,8 @@ create table if not exists `participants` (
 
 insert into user (`id`, `fullname`, `email`, `username`, `password`, `created_at`, `updated_at`) values
 (1, 'Khaleb Great', 'developer@khaleb.dev', 'developer', '$2y$10$nNSlA.PMMaxvMKWpCtFXf.O71O5vF9C5vhn.gFiq..seTO85vhEmy', NOW(), NOW());
+(2, 'Miracle Daniel', 'bestie@khaleb.dev', 'miradani', '$2y$10$nNSlA.PMMaxvMKWpCtFXf.O71O5vF9C5vhn.gFiq..seTO85vhEmy', NOW(), NOW());
+(3, 'Judith Chiamaka', 'dearest@khaleb.dev', 'judith', '$2y$10$nNSlA.PMMaxvMKWpCtFXf.O71O5vF9C5vhn.gFiq..seTO85vhEmy', NOW(), NOW());
 -- password = 123456
 
 COMMIT;

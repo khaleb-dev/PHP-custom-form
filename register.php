@@ -22,7 +22,7 @@
         $processManager = new Manager(); // This class is found in processor.php
         $form = $processManager->findFormBySlug($slug); // search for the form
 
-        // check the value of what is 
+        // check the datatype of what was returned (it's either a string or an array)
         if (is_string($form)) {
             echo $form;
             exit();
