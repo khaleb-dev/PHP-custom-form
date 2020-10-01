@@ -13,7 +13,8 @@
 
     if ((isset($_POST['csrf'])) && ($_POST['csrf'] === $_SESSION['CSRF'])) {
         // $formSetting[] because I love arrays :-)
-        $formSetting['name'] = htmlentities(trim($_POST['formName']), ENT_QUOTES, 'UTF-8');
+        // perform backend validation for form feilds.
+        $formSetting['title'] = htmlentities(trim($_POST['formTitle']), ENT_QUOTES, 'UTF-8');
         $formSetting['firstname'] = htmlentities(trim($_POST['chkFirstName']), ENT_QUOTES, 'UTF-8');
         $formSetting['middlename'] = htmlentities(trim($_POST['chkMiddleName']), ENT_QUOTES, 'UTF-8');
         $formSetting['lastname'] = htmlentities(trim($_POST['chkLastName']), ENT_QUOTES, 'UTF-8');
@@ -22,16 +23,9 @@
         $formSetting['address'] = htmlentities(trim($_POST['chkAddress']), ENT_QUOTES, 'UTF-8');
         $formSetting['liDis'] = htmlentities(trim($_POST['chkLiDis']), ENT_QUOTES, 'UTF-8');
 
-        $processManager = new Manager();
-
-        $save = $processManager->createForm($formSetting);
-
-        if ($save) {
-            $msg = "<span style='color: green;'>form saved.</span>";
-        }
-        else{
-            $msg = "<span style='color: red;'>form failed to save.</span>";
-        }
+        // create a new instance of the 'manager' class.
+        $processManager = new Manager(); // This class is found in processor.php
+        $msg = $processManager->createForm($formSetting); // send the validated form data to "createForm" method in 'manager' class.
     }
 ?>
 
@@ -42,7 +36,8 @@
 </head>
 <body>
 	<form method="POST" action="">
-        <input type="text" name="formName" value="Set a name for your form." style="width: 35em;" required="required">
+        <span>Form Title : </span>
+        <input type="text" name="formTitle" placeholder="Set a title for your form." style="width: 35em;" required="required">
         <p>Select the fields which will be presented to the User upon registration</p>
 		<!-- First name -->
 		<input type="hidden" name="chkFirstName" value="0">
