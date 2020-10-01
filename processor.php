@@ -41,7 +41,6 @@ class Manager
 	public function createForm(array $formDetails)
 	{
         try {
-
             $sql = "INSERT INTO form(created_by, slug, form_title, last_name, first_name, middle_name, gender, dob, address, likes_dislikes, created_at, updated_at)" . "VALUES (:userId, :slug, :formTitle, :lastName, :firstName, :middleName, :gender, :dob, :address, :liDis, NOW(), NOW())";
             $q = $this->connect->prepare($sql);
             $q->execute(array(
@@ -59,7 +58,8 @@ class Manager
             
             $this->response = "<span style='color: green;'>New Form Created successfully.</span>";
 
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e) {
             $this->response = "<span style='color: red;'>An error might have occurred in the System</span>";
         }
         return $this->response;
@@ -79,8 +79,35 @@ class Manager
             else {
             	$this->response = $form;
             }
-        } catch(PDOException $e) {
+        }
+        catch(PDOException $e) {
             $this->response = "<span style='color: red;'>You're kind of trying to hack our system. Nice try though</span>";
+        }
+        return $this->response;
+    }
+
+    public function createParticipant(array $participantDetails, int $formId)
+	{
+        try {
+            $sql = "INSERT INTO participants(form_id, last_name, first_name, middle_name, date_of_birth, address, gender, likes, dislikes, created_at, updated_at)" . "VALUES (:formId, :lastName, :firstName, :middleName, :dob, :address, :gender, :likes, :dislikes, NOW(), NOW())";
+            $q = $this->connect->prepare($sql);
+            $q->execute(array(
+            	':formId' => $formId,
+            	':lastName' => $participantDetails['txtLastName'],
+            	':firstName' => $participantDetails['txtFirstName'],
+            	':middleName' => $participantDetails['txtMiddleName'],
+            	':gender' => $participantDetails['rdGender'],
+            	':dob' => $participantDetails['txtDob'],
+            	':address' => $participantDetails['txtAddress'],
+            	':likes' => $participantDetails['txtLikes'],
+            	':dislikes' => $participantDetails['txtDislikes']
+            ));
+            
+            $this->response = "<span style='color: green;'>Your Registration was successful.</span>";
+
+        }
+        catch (PDOException $e) {
+            $this->response = "<span style='color: red;'>An error have occurred in the System</span>";
         }
         return $this->response;
     }

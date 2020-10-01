@@ -27,6 +27,24 @@
             echo $form;
             exit();
         }
+
+        if ((isset($_POST['csrf'])) && ($_POST['csrf'] === $_SESSION['CSRF'])) {
+            // $details[] because I realy love arrays :-) .
+            // In performing backend validation for form feilds, we will check if an input field is available in the form or not.
+            // therefore if a field is not available, we set its accompaning variable to an empty string.
+            $details['txtFirstName'] = htmlentities(trim(isset($_POST['txtFirstName']) ? $_POST['txtFirstName'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtMiddleName'] = htmlentities(trim(isset($_POST['txtMiddleName']) ? $_POST['txtMiddleName'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtLastName'] = htmlentities(trim(isset($_POST['txtLastName']) ? $_POST['txtLastName'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['rdGender'] = htmlentities(trim(isset($_POST['rdGender']) ? $_POST['rdGender'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtDob'] = htmlentities(trim(isset($_POST['txtDob']) ? $_POST['txtDob'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtAddress'] = htmlentities(trim(isset($_POST['txtAddress']) ? $_POST['txtAddress'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtLikes'] = htmlentities(trim(isset($_POST['txtLikes']) ? $_POST['txtLikes'] : ""), ENT_QUOTES, 'UTF-8');
+            $details['txtDislikes'] = htmlentities(trim(isset($_POST['txtDislikes']) ? $_POST['txtDislikes'] : ""), ENT_QUOTES, 'UTF-8');
+
+            // create a new instance of the 'manager' class.
+            $processManager = new Manager(); // This class is found in processor.php
+            $msg = $processManager->createParticipant($details, $form->id); // send the validated form data to "createForm" method in 'manager' class.
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -74,7 +92,7 @@
         ?>
             <!-- Date of Birth -->
             <p>Date of Birth: </p>
-            <input type="date" name="txtDob" style="width: 35em;">
+            <input type="date" name="txtDob" max="3000-12-31" min="1000-01-01" style="width: 35em;">
         <?php
             endif;
             if ($form->address):
@@ -102,5 +120,7 @@
         <!-- Submit button -->
         <p><button type="submit" name="btnRegister" style="width: 35.5em;">Register</button></p>
     </form>
+
+    <br><br><p><?= $msg ?></p>
 </body>
 </html>
