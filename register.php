@@ -1,37 +1,106 @@
+<?php 
+  /**
+   * Khaleb O'Brien (Weird_Coder)
+   * ebukauche52@gmail.com
+   * https://khaleb.dev
+   * Wed, 1st October, 2020
+  */
+    @session_start();
+    $_SESSION['CSRF'] = "wwewl090lkHJzoopIOIUHghKH"; // This should be be generated dynamically
+    $msg = "";
+
+    require_once "processor.php";
+
+    if (isset($_GET['form'])) {
+        // validate the slug
+        $slug = htmlentities(trim(isset($_GET['form']) ? $_GET['form'] : ""), ENT_QUOTES, 'UTF-8');
+        if ($slug == "" || is_null($slug) || empty($slug) || $slug == false) {
+            echo "<h3 style='color: red;'>Fatal error, slug not found</h3>";
+            exit();
+        }
+        // create a new instance of the 'manager' class.
+        $processManager = new Manager(); // This class is found in processor.php
+        $form = $processManager->findFormBySlug($slug); // search for the form
+
+        // check the value of what is 
+        if (is_string($form)) {
+            echo $form;
+            exit();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Create A Form</title>
+	<title>Registration Form</title>
 </head>
 <body>
-	<form method="POST" action="">
-		<!-- First name -->
-		<input type="hidden" name="ckFirstName" value="0">
-        <input type="checkbox" name="ckFirstName" value="1">
+    <h1><?= $form->form_title ?></h1>
+    <form method="POST" action="">
+        <?php
+            if ($form->first_name):
+        ?>
+            <!-- First name -->
+            <p>First Name: </p>
+            <input type="text" name="txtFirstName" style="width: 35em;">
+        <?php
+            endif;
+            if ($form->middle_name):
+        ?>
+        <!-- Middle name -->
+        <p>Middle Name: </p>
+        <input type="text" name="txtMiddleName" style="width: 35em;">
+        <?php
+            endif;
+            if ($form->last_name):
+        ?>
+            <!-- Last name -->
+            <p>Last Name: </p>
+            <input type="text" name="txtLastName" style="width: 35em;">
+        <?php
+            endif;
+            if ($form->gender):
+        ?>
+            <!-- gender -->
+            <p>Gender: </p>
+            <input type="radio" id="rdGenderM" name="rdGender" value="male">
+            <label for="rdGenderM">Male</label>
 
-		<!-- Middle name -->
-		<input type="hidden" name="ckMiddleName" value="0">
-        <input type="checkbox" name="ckMiddleName" value="1">
+            <input type="radio" id="rdGenderF" name="rdGender" value="female">
+            <label for="rdGenderF">Female</label>
+        <?php
+            endif;
+            if ($form->dob):
+        ?>
+            <!-- Date of Birth -->
+            <p>Date of Birth: </p>
+            <input type="date" name="txtDob" style="width: 35em;">
+        <?php
+            endif;
+            if ($form->address):
+        ?>
+            <!-- address -->
+            <p>Address: </p>
+            <input type="text" name="txtAddress" style="width: 35em;">
+        <?php
+            endif;
+            if ($form->likes_dislikes):
+        ?>
+            <!-- Likes -->
+            <p>Likes: </p>
+            <input type="text" name="txtLikes" style="width: 35em;">
 
-		<!-- Last name -->
-		<input type="hidden" name="ckLastName" value="0">
-        <input type="checkbox" name="ckLastName" value="1">
+            <!-- Dislikes -->
+            <p>Dislikes: </p>
+            <input type="text" name="txtDislikes" style="width: 35em;">
+        <?php
+            endif;
+        ?>
+        <!-- CSRF -->
+        <input type="hidden" name="csrf" value="<?=$_SESSION['CSRF']?>">
 
-		<!-- gender -->
-        <input type="hidden" name="chkGender" value="0">
-        <input type="checkbox" name="chkGender" value="1">
-
-        <!-- Date of Birth -->
-        <input type="hidden" name="chkDoB" value="0">
-        <input type="checkbox" name="chkDoB" value="1">
-
-        <!-- address -->
-        <input type="hidden" name="chkAddress" value="0">
-        <input type="checkbox" name="chkAddress" value="1">
-
-        <!-- Likes and Dislikes -->
-        <input type="hidden" name="chkLiDis" value="0">
-        <input type="checkbox" name="chkLiDis" value="1">
-	</form>
+        <!-- Submit button -->
+        <p><button type="submit" name="btnRegister" style="width: 35.5em;">Register</button></p>
+    </form>
 </body>
 </html>
