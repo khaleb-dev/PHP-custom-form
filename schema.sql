@@ -1,37 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Create A Form</title>
-</head>
-<body>
-	<form method="POST" action="">
-		<!-- First name -->
-		<input type="hidden" name="ckFirstName" value="0">
-        <input type="checkbox" name="ckFirstName" value="1">
+drop database if exists `custom_form`;
 
-		<!-- Middle name -->
-		<input type="hidden" name="ckMiddleName" value="0">
-        <input type="checkbox" name="ckMiddleName" value="1">
+create database `custom_form`;
 
-		<!-- Last name -->
-		<input type="hidden" name="ckLastName" value="0">
-        <input type="checkbox" name="ckLastName" value="1">
+use `custom_form`;
 
-		<!-- gender -->
-        <input type="hidden" name="chkGender" value="0">
-        <input type="checkbox" name="chkGender" value="1">
+create table if not exists `user` (
+    `id` int(10) not null auto_increment,
+    `fullname` varchar(300) not null,
+    `email` varchar(100) null,
+    `username` varchar(100) not null,
+    `password` varchar(255) not null,
+    `created_at` datetime not null,
+    `updated_at` datetime not null,
+    primary key (`id`)
+);
 
-        <!-- Date of Birth -->
-        <input type="hidden" name="chkDoB" value="0">
-        <input type="checkbox" name="chkDoB" value="1">
+create table if not exists `form` (
+    `id` int(10) not null auto_increment,
+    `created_by` int(10) not null,
+    `slug` varchar(8) not null,
+    `form_title` varchar(100) not null,
+    `last_name` tinyint(1) null default 0,
+    `first_name` tinyint(1) null default 0,
+    `middle_name` tinyint(1) null default 0,
+    `gender` tinyint(1) null default 0,
+    `dob` tinyint(1) null default 0,
+    `address` tinyint(1) null default 0,
+    `likes_dislikes` tinyint(1) null default 0,
+    `created_at` datetime not null,
+    `updated_at` datetime not null,
+    primary key (`id`),
+    foreign key (`created_by`) references user(`id`)
+);
 
-        <!-- address -->
-        <input type="hidden" name="chkAddress" value="0">
-        <input type="checkbox" name="chkAddress" value="1">
+create table if not exists `participants` (
+    `id` int(10) not null auto_increment,
+    `form_id` int(10) not null,
+    `last_name` varchar(100) null,
+    `first_name` varchar(100) null,
+    `middle_name` varchar(100) null,
+    `date_of_birth` date null,
+    `address` varchar(100) null,
+    `gender` varchar(10) null,
+    `likes` varchar(500) null,
+    `dislikes` varchar(500) null,
+    `created_at` datetime not null,
+    `updated_at` datetime not null,
+    primary key (`id`),
+    foreign key (`form_id`) references form(`id`)
+);
 
-        <!-- Likes and Dislikes -->
-        <input type="hidden" name="chkLiDis" value="0">
-        <input type="checkbox" name="chkLiDis" value="1">
-	</form>
-</body>
-</html>
+insert into user (`id`, `fullname`, `email`, `username`, `password`, `created_at`, `updated_at`) values
+(1, 'Khaleb Great', 'developer@khaleb.dev', 'developer', '$2y$10$nNSlA.PMMaxvMKWpCtFXf.O71O5vF9C5vhn.gFiq..seTO85vhEmy', NOW(), NOW());
+-- password = 123456
+
+COMMIT;
